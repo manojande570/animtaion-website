@@ -10,8 +10,9 @@ body {
   background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
   color: #fff;
   overflow-x: hidden;
-  cursor: none;
 }
+
+
 
 /* Cursor Animation Styles */
 .liquid-cursor {
@@ -21,11 +22,13 @@ body {
   background: #00d4ff;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
   transition: all 0.1s ease;
   transform: translate(-50%, -50%);
-  opacity: 1;
-  visibility: visible;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
 }
 
 .liquid-cursor.cursor-click {

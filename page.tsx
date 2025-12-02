@@ -7,10 +7,26 @@ export default function Home() {
   const [imageLoaded, setImageLoaded] = useState({})
 
   useEffect(() => {
-    // Simple cursor system with trail dots
-    const cursor = document.createElement('div')
-    cursor.className = 'liquid-cursor'
-    document.body.appendChild(cursor)
+    const initCursor = () => {
+      // Remove any existing cursors first
+      document.querySelectorAll('.liquid-cursor').forEach(el => el.remove())
+      
+      // Simple cursor system with trail dots
+      const cursor = document.createElement('div')
+      cursor.className = 'liquid-cursor'
+      cursor.id = 'main-cursor'
+      document.body.appendChild(cursor)
+      
+      return cursor
+    }
+    
+    // Initialize immediately and also with timeout
+    const cursor = initCursor()
+    setTimeout(() => {
+      if (!document.getElementById('main-cursor')) {
+        initCursor()
+      }
+    }, 100)
 
     const trail = []
     for (let i = 0; i < 8; i++) {
@@ -28,6 +44,16 @@ export default function Home() {
     cursor.style.top = mouseY + 'px'
     cursor.style.opacity = '1'
     cursor.style.visibility = 'visible'
+    cursor.style.display = 'block'
+    cursor.style.zIndex = '99999'
+    cursor.style.position = 'fixed'
+    cursor.style.width = '20px'
+    cursor.style.height = '20px'
+    cursor.style.background = '#00d4ff'
+    cursor.style.borderRadius = '50%'
+    cursor.style.pointerEvents = 'none'
+    cursor.style.transform = 'translate(-50%, -50%)'
+    cursor.style.boxShadow = '0 0 20px rgba(0, 212, 255, 0.8)'
 
     const moveCursor = (e) => {
       mouseX = e.clientX
@@ -193,6 +219,7 @@ export default function Home() {
 
   return (
     <>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
       <div className="animated-bg"></div>
       <div className="particles" id="particles"></div>
 
