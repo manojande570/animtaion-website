@@ -7,150 +7,61 @@ export default function Home() {
   const [imageLoaded, setImageLoaded] = useState({})
 
   useEffect(() => {
-    // Mind-blowing cursor system
+    // Simple cursor system with trail dots
     const cursor = document.createElement('div')
     cursor.className = 'liquid-cursor'
-    cursor.innerHTML = '<div class="cursor-core"></div>'
     document.body.appendChild(cursor)
 
     const trail = []
-    const trailLength = 20
-    const particles = []
-    const explosions = []
-    
-    for (let i = 0; i < trailLength; i++) {
+    for (let i = 0; i < 8; i++) {
       const dot = document.createElement('div')
       dot.className = 'trail-dot'
       document.body.appendChild(dot)
-      trail.push({ element: dot, x: 0, y: 0, scale: 0 })
+      trail.push({ element: dot, x: 0, y: 0 })
     }
 
-    for (let i = 0; i < 30; i++) {
-      const particle = document.createElement('div')
-      particle.className = 'gravity-particle'
-      document.body.appendChild(particle)
-      particles.push({ 
-        element: particle, 
-        x: 0, y: 0, vx: 0, vy: 0, 
-        life: 0, angle: Math.random() * Math.PI * 2
-      })
-    }
-
-    let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0
-    let velocity = 0, isMoving = false
-    let time = 0
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2, isMoving = false
+    let moveTimeout
+    
+    // Initialize cursor position and visibility
+    cursor.style.left = mouseX + 'px'
+    cursor.style.top = mouseY + 'px'
+    cursor.style.opacity = '1'
+    cursor.style.visibility = 'visible'
 
     const moveCursor = (e) => {
-      const prevX = mouseX, prevY = mouseY
       mouseX = e.clientX
       mouseY = e.clientY
-      velocity = Math.min(Math.sqrt((mouseX - prevX) ** 2 + (mouseY - prevY) ** 2), 50)
-      isMoving = velocity > 1
+      cursor.style.left = mouseX + 'px'
+      cursor.style.top = mouseY + 'px'
       
-      if (velocity > 15) {
-        createExplosion(mouseX, mouseY)
-      }
-    }
-
-    const createExplosion = (x, y) => {
-      for (let i = 0; i < 8; i++) {
-        const spark = document.createElement('div')
-        spark.className = 'spark'
-        spark.style.left = x + 'px'
-        spark.style.top = y + 'px'
-        document.body.appendChild(spark)
-        
-        const angle = (i / 8) * Math.PI * 2
-        const speed = 5 + Math.random() * 10
-        spark.style.setProperty('--dx', Math.cos(angle) * speed + 'px')
-        spark.style.setProperty('--dy', Math.sin(angle) * speed + 'px')
-        
-        setTimeout(() => spark.remove(), 1000)
-      }
-    }
-
-    const animate = () => {
-      time += 0.1
+      isMoving = true
+      clearTimeout(moveTimeout)
       
-      // Liquid cursor movement
-      targetX += (mouseX - targetX) * 0.15
-      targetY += (mouseY - targetY) * 0.15
-      
-      const distortion = velocity * 0.3
-      const wobble = Math.sin(time * 3) * (isMoving ? 5 : 2)
-      
-      cursor.style.transform = `
-        translate(${targetX}px, ${targetY}px) 
-        scale(${1 + velocity * 0.02}) 
-        skew(${distortion}deg, ${wobble}deg)
-        rotate(${velocity * 2}deg)
-      `
-      
-      // Trail effect
+      // Show trail dots when moving
       trail.forEach((dot, i) => {
-        const delay = (i + 1) * 0.08
-        dot.x += (targetX - dot.x) * delay
-        dot.y += (targetY - dot.y) * delay
-        dot.scale = Math.max(0, 1 - i * 0.05)
-        
-        dot.element.style.transform = `
-          translate(${dot.x}px, ${dot.y}px) 
-          scale(${dot.scale})
-          rotate(${time * 50 + i * 30}deg)
-        `
-        dot.element.style.opacity = dot.scale
+        setTimeout(() => {
+          dot.x = mouseX
+          dot.y = mouseY
+          dot.element.style.left = dot.x + 'px'
+          dot.element.style.top = dot.y + 'px'
+          dot.element.style.opacity = '0.7'
+          
+          setTimeout(() => {
+            dot.element.style.opacity = '0'
+          }, 100 + i * 50)
+        }, i * 30)
       })
       
-      // Gravity particles
-      particles.forEach((p, i) => {
-        if (isMoving && Math.random() < 0.3) {
-          p.x = mouseX + (Math.random() - 0.5) * 100
-          p.y = mouseY + (Math.random() - 0.5) * 100
-          p.vx = (Math.random() - 0.5) * 10
-          p.vy = (Math.random() - 0.5) * 10
-          p.life = 1
-        }
-        
-        if (p.life > 0) {
-          const dx = mouseX - p.x
-          const dy = mouseY - p.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
-          
-          if (distance < 200) {
-            const force = (200 - distance) / 200 * 0.5
-            p.vx += (dx / distance) * force
-            p.vy += (dy / distance) * force
-          }
-          
-          p.x += p.vx
-          p.y += p.vy
-          p.vx *= 0.95
-          p.vy *= 0.95
-          p.life -= 0.01
-          
-          p.element.style.transform = `
-            translate(${p.x}px, ${p.y}px) 
-            scale(${p.life}) 
-            rotate(${p.angle + time * 100}deg)
-          `
-          p.element.style.opacity = p.life
-        }
-      })
-      
-      requestAnimationFrame(animate)
+      moveTimeout = setTimeout(() => {
+        isMoving = false
+      }, 100)
     }
-    
-    animate()
 
     const addCursorEffect = () => cursor.classList.add('cursor-click')
     const removeCursorEffect = () => cursor.classList.remove('cursor-click')
-    const addHoverEffect = () => {
-      cursor.classList.add('morphing')
-      createExplosion(mouseX, mouseY)
-    }
-    const removeHoverEffect = () => {
-      cursor.classList.remove('morphing')
-    }
+    const addHoverEffect = () => cursor.classList.add('morphing')
+    const removeHoverEffect = () => cursor.classList.remove('morphing')
 
     document.addEventListener('mousemove', moveCursor)
     document.addEventListener('mousedown', addCursorEffect)
@@ -277,8 +188,6 @@ export default function Home() {
       document.removeEventListener('mouseup', removeCursorEffect)
       cursor?.remove()
       trail.forEach(t => t.element?.remove())
-      particles.forEach(p => p.element?.remove())
-      document.querySelectorAll('.spark').forEach(s => s.remove())
     }
   }, [])
 
