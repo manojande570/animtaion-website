@@ -244,17 +244,17 @@ export default function Home() {
             <a href="#services" className="cta-button">Explore Services</a>
           </div>
           <div className="hero-visual">
-            <div className="image-container">
-              <Image 
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop" 
-                alt="Team Collaboration" 
-                className={`hero-image lazy-image ${imageLoaded['hero'] ? 'loaded' : ''}`}
-                width={800}
-                height={600}
-                loading="lazy"
-                onLoad={() => setImageLoaded(prev => ({...prev, hero: true}))}
-              />
-              {!imageLoaded['hero'] && <div className="image-skeleton"></div>}
+            <div className="hero-animation">
+              <div className="tech-grid">
+                <div className="tech-item">💻</div>
+                <div className="tech-item">🚀</div>
+                <div className="tech-item">⚡</div>
+                <div className="tech-item">🔧</div>
+                <div className="tech-item">📱</div>
+                <div className="tech-item">🌐</div>
+              </div>
+              <div className="pulse-circle"></div>
+              <div className="orbit-ring"></div>
             </div>
           </div>
         </div>
@@ -264,29 +264,25 @@ export default function Home() {
         <h2 className="section-title scroll-animate">About BNS International</h2>
         <p className="section-subtitle scroll-animate">Your trusted partner in IT solutions and staffing</p>
         <div className="about-content">
-          <div className="about-text scroll-left bounce-in">
-            <div className="text-reveal">
-              <p>BNS International Inc is a leading IT staffing and Software Development Company located in USA. Leveraging ten years of staffing and consulting experience, we have pioneered in the field of IT and outsourcing services.</p>
-            </div>
-            <div className="text-reveal" style={{animationDelay: '0.2s'}}>
-              <p>With a wide range of project execution models and costing models, our solutions are very client-centric, cost-effective and process driven quality solutions. Our solutions aim to provide high value by optimizing cost of ownership of technology investments for customers.</p>
-            </div>
-            <div className="text-reveal" style={{animationDelay: '0.4s'}}>
-              <p>We focus exclusively on maximizing client returns from outsourcing and off-shoring. Our wide range of customized models, scalability, and immense talent pool enable us to reliably serve customer needs.</p>
-            </div>
+          <div className="about-text">
+            <p>BNS International Inc is a leading IT staffing and Software Development Company located in USA. Leveraging ten years of staffing and consulting experience, we have pioneered in the field of IT and outsourcing services.</p>
+            <p>With a wide range of project execution models and costing models, our solutions are very client-centric, cost-effective and process driven quality solutions. Our solutions aim to provide high value by optimizing cost of ownership of technology investments for customers.</p>
+            <p>We focus exclusively on maximizing client returns from outsourcing and off-shoring. Our wide range of customized models, scalability, and immense talent pool enable us to reliably serve customer needs.</p>
           </div>
-          <div className="scroll-right image-float">
-            <div className="image-container">
-              <Image 
-                src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop" 
-                alt="Professional Team" 
-                className={`about-image lazy-image ${imageLoaded['about'] ? 'loaded' : ''}`}
-                width={800}
-                height={600}
-                loading="lazy"
-                onLoad={() => setImageLoaded(prev => ({...prev, about: true}))}
-              />
-              {!imageLoaded['about'] && <div className="image-skeleton"></div>}
+          <div className="about-visual">
+            <div className="geometric-animation">
+              <div className="floating-shape"></div>
+              <div className="floating-shape"></div>
+              <div className="floating-shape"></div>
+              <div className="floating-shape"></div>
+              <div className="central-element">
+                <div className="central-text">
+                  Innovation<br/>& Excellence
+                </div>
+              </div>
+              <div className="orbit-element"></div>
+              <div className="orbit-element"></div>
+              <div className="orbit-element"></div>
             </div>
           </div>
         </div>
